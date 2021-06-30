@@ -40,13 +40,10 @@ import (
 	grpcmiddleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/exporters/otlp"
-	"go.opentelemetry.io/otel/exporters/otlp/otlpgrpc"
+	//"go.opentelemetry.io/otel/exporters/otlp"
+	//"go.opentelemetry.io/otel/exporters/otlp/otlpgrpc"
+	"go.opentelemetry.io/otel/exporters/stdout"
 	"go.opentelemetry.io/otel/propagation"
-	"go.opentelemetry.io/otel/sdk/resource"
-	sdktrace "go.opentelemetry.io/otel/sdk/trace"
-	//sdktraceexporter "go.opentelemetry.io/otel/sdk/export/trace"
-	"go.opentelemetry.io/otel/semconv"
 	"google.golang.org/grpc"
 	"k8s.io/klog/v2"
 	"k8s.io/kubernetes/pkg/kubelet/metrics/collectors"
@@ -199,27 +196,39 @@ func ListenAndServeKubeletReadOnlyServer(host HostInterface, resourceAnalyzer st
 }
 
 func initOtelTracing(ctx context.Context, otelServiceName, collectorEndpoint string) ([]otelgrpc.Option, error) {
-	exporter, err := otlp.NewExporter(ctx,
-		otlpgrpc.NewDriver(
-			otlpgrpc.WithEndpoint(collectorEndpoint),
-			otlpgrpc.WithInsecure(),
-		))
+	//exporter, err := otlp.NewExporter(ctx,
+	//	otlpgrpc.NewDriver(
+	//		otlpgrpc.WithEndpoint(collectorEndpoint),
+	//		otlpgrpc.WithInsecure(),
+	//	))
+	//exporter, err := stdout.NewExporter((stdout.WithPrettyPrint()))
+	//if err != nil {
+	//	return nil, err
+	//}
+	//if exporter == nil {
+	//	return nil, fmt.Errorf("error setting up opentelemetry tracing")
+	//}
+	//res := resource.NewWithAttributes(
+	//	semconv.ServiceNameKey.String(otelServiceName),
+	//)
+	//var opts []otelgrpc.Option
+	// TODO: shutdown tracer provider? where?
+	//tp := sdktrace.NewTracerProvider(sdktrace.WithBatcher(exporter), sdktrace.WithResource(res))
+	//tmp := propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{})
+	//opts = append(opts, otelgrpc.WithPropagators(tmp), otelgrpc.WithTracerProvider(tp))
+	//otel.SetTracerProvider(tp)
+	//otel.SetTextMapPropagator(tmp)
+	exportOpts := []stdout.Option{
+		stdout.WithPrettyPrint(),
+	}
+	// Registers both a trace and meter Provider globally.
+	tp, _, err := stdout.InstallNewPipeline(exportOpts, nil)
 	if err != nil {
 		return nil, err
 	}
-	if exporter == nil {
-		return nil, fmt.Errorf("error setting up opentelemetry tracing")
-	}
-	res := resource.NewWithAttributes(
-		semconv.ServiceNameKey.String(otelServiceName),
-	)
-	var opts []otelgrpc.Option
-	// TODO: shutdown tracer provider? where?
-	tp := sdktrace.NewTracerProvider(sdktrace.WithBatcher(exporter), sdktrace.WithResource(res))
-	tmp := propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{})
-	opts = append(opts, otelgrpc.WithPropagators(tmp), otelgrpc.WithTracerProvider(tp))
 	otel.SetTracerProvider(tp)
-	otel.SetTextMapPropagator(tmp)
+	tmp := propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{})
+	opts := []otelgrpc.Option{otelgrpc.WithPropagators(tmp), otelgrpc.WithTracerProvider(tp)}
 	return opts, nil
 }
 
@@ -234,6 +243,7 @@ func ListenAndServePodResources(socket string,
 		otelUnaryServerInterceptor  grpc.UnaryServerInterceptor
 		otelStreamServerInterceptor grpc.StreamServerInterceptor
 		//exporter                    sdktraceexporter.SpanExporter
+		//opts []otelgrpc.Option
 		opts []otelgrpc.Option
 		err  error
 	)
