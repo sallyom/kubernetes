@@ -321,6 +321,11 @@ func (in *KubeletConfiguration) DeepCopyInto(out *KubeletConfiguration) {
 		*out = new(bool)
 		**out = **in
 	}
+	if in.EnableOtelTracing != nil {
+		in, out := &in.EnableOtelTracing, &out.EnableOtelTracing
+		*out = new(bool)
+		**out = **in
+	}
 	out.OpenTelemetryConfig = in.OpenTelemetryConfig
 	return
 }

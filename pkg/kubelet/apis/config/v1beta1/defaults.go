@@ -253,7 +253,9 @@ func SetDefaults_KubeletConfiguration(obj *kubeletconfigv1beta1.KubeletConfigura
 		obj.EnableDebugFlagsHandler = utilpointer.BoolPtr(true)
 	}
 	// OpenTelemetryConfig TODO
-	obj.OpenTelemetryConfig.EnableTracing = true
+	if obj.EnableOtelTracing == nil {
+		obj.EnableOtelTracing = utilpointer.BoolPtr(true)
+	}
 	if obj.OpenTelemetryConfig.TracingServiceName == "" {
 		obj.OpenTelemetryConfig.TracingServiceName = "kubelet"
 	}

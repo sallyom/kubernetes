@@ -248,7 +248,7 @@ func ListenAndServePodResources(socket string,
 		err  error
 	)
 	// TODO: check backend connection, don't instrument if no connection
-	if kubeCfg.OpenTelemetryConfig.EnableTracing {
+	if kubeCfg.EnableOtelTracing {
 		opts, err = initOtelTracing(ctx, kubeCfg.OpenTelemetryConfig.TracingServiceName, kubeCfg.OpenTelemetryConfig.CollectorEndpoint)
 		if err != nil {
 			klog.ErrorS(err, "Failed to configure opentelemetry tracing")

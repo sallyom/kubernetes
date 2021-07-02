@@ -50799,6 +50799,13 @@ func schema_k8sio_kubelet_config_v1beta1_KubeletConfiguration(ref common.Referen
 							Format:      "",
 						},
 					},
+					"enableOtelTracing": {
+						SchemaProps: spec.SchemaProps{
+							Description: "EnableOtelTracing enables opentelemetry trace export Default: true",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
 					"OpenTelemetryConfig": {
 						SchemaProps: spec.SchemaProps{
 							Description: "OpenTelemetryConfig",
@@ -50933,21 +50940,14 @@ func schema_k8sio_kubelet_config_v1beta1_OpenTelemetryConfig(ref common.Referenc
 				Description: "OpenTelemetryConfig specifies configuration for opentelemetry tracing",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
-					"EnableTracing": {
-						SchemaProps: spec.SchemaProps{
-							Default: false,
-							Type:    []string{"boolean"},
-							Format:  "",
-						},
-					},
-					"TracingServiceName": {
+					"tracingServiceName": {
 						SchemaProps: spec.SchemaProps{
 							Default: "",
 							Type:    []string{"string"},
 							Format:  "",
 						},
 					},
-					"CollectorEndpoint": {
+					"collectorEndpoint": {
 						SchemaProps: spec.SchemaProps{
 							Default: "",
 							Type:    []string{"string"},
@@ -50955,7 +50955,7 @@ func schema_k8sio_kubelet_config_v1beta1_OpenTelemetryConfig(ref common.Referenc
 						},
 					},
 				},
-				Required: []string{"EnableTracing", "TracingServiceName", "CollectorEndpoint"},
+				Required: []string{"tracingServiceName", "collectorEndpoint"},
 			},
 		},
 	}

@@ -381,6 +381,9 @@ func autoConvert_v1beta1_KubeletConfiguration_To_config_KubeletConfiguration(in 
 	if err := v1.Convert_Pointer_bool_To_bool(&in.EnableDebugFlagsHandler, &out.EnableDebugFlagsHandler, s); err != nil {
 		return err
 	}
+	if err := v1.Convert_Pointer_bool_To_bool(&in.EnableOtelTracing, &out.EnableOtelTracing, s); err != nil {
+		return err
+	}
 	if err := Convert_v1beta1_OpenTelemetryConfig_To_config_OpenTelemetryConfig(&in.OpenTelemetryConfig, &out.OpenTelemetryConfig, s); err != nil {
 		return err
 	}
@@ -545,6 +548,9 @@ func autoConvert_config_KubeletConfiguration_To_v1beta1_KubeletConfiguration(in 
 	if err := v1.Convert_bool_To_Pointer_bool(&in.EnableDebugFlagsHandler, &out.EnableDebugFlagsHandler, s); err != nil {
 		return err
 	}
+	if err := v1.Convert_bool_To_Pointer_bool(&in.EnableOtelTracing, &out.EnableOtelTracing, s); err != nil {
+		return err
+	}
 	if err := Convert_config_OpenTelemetryConfig_To_v1beta1_OpenTelemetryConfig(&in.OpenTelemetryConfig, &out.OpenTelemetryConfig, s); err != nil {
 		return err
 	}
@@ -647,7 +653,6 @@ func Convert_config_MemoryReservation_To_v1beta1_MemoryReservation(in *config.Me
 }
 
 func autoConvert_v1beta1_OpenTelemetryConfig_To_config_OpenTelemetryConfig(in *v1beta1.OpenTelemetryConfig, out *config.OpenTelemetryConfig, s conversion.Scope) error {
-	out.EnableTracing = in.EnableTracing
 	out.TracingServiceName = in.TracingServiceName
 	out.CollectorEndpoint = in.CollectorEndpoint
 	return nil
@@ -659,7 +664,6 @@ func Convert_v1beta1_OpenTelemetryConfig_To_config_OpenTelemetryConfig(in *v1bet
 }
 
 func autoConvert_config_OpenTelemetryConfig_To_v1beta1_OpenTelemetryConfig(in *config.OpenTelemetryConfig, out *v1beta1.OpenTelemetryConfig, s conversion.Scope) error {
-	out.EnableTracing = in.EnableTracing
 	out.TracingServiceName = in.TracingServiceName
 	out.CollectorEndpoint = in.CollectorEndpoint
 	return nil

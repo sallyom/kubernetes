@@ -864,6 +864,10 @@ type KubeletConfiguration struct {
 	// Default: true
 	// +optional
 	EnableDebugFlagsHandler *bool `json:"enableDebugFlagsHandler,omitempty"`
+	// EnableOtelTracing enables opentelemetry trace export
+	// Default: true
+	// +optional
+	EnableOtelTracing *bool `json:"enableOtelTracing,omitempty"`
 	// OpenTelemetryConfig
 	// +optional
 	OpenTelemetryConfig OpenTelemetryConfig
@@ -956,8 +960,7 @@ type MemoryReservation struct {
 
 // OpenTelemetryConfig specifies configuration for opentelemetry tracing
 type OpenTelemetryConfig struct {
-	EnableTracing      bool
-	TracingServiceName string
-	CollectorEndpoint  string
+	TracingServiceName string `json:"tracingServiceName"`
+	CollectorEndpoint  string `json:"collectorEndpoint"`
 }
 

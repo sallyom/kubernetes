@@ -514,7 +514,7 @@ func AddKubeletConfigFlags(mainfs *pflag.FlagSet, c *kubeletconfig.KubeletConfig
 	fs.BoolVar(&c.KernelMemcgNotification, "kernel-memcg-notification", c.KernelMemcgNotification, "If enabled, the kubelet will integrate with the kernel memcg notification to determine if memory eviction thresholds are crossed rather than polling.")
 
 	// OpenTelemetryConfig
-	fs.BoolVar(&c.OpenTelemetryConfig.EnableTracing, "enable-tracing", c.OpenTelemetryConfig.EnableTracing, ""+
+	fs.BoolVar(&c.EnableOtelTracing, "enable-otel-tracing", c.EnableOtelTracing, ""+
 		"Enables collection of opentelemetry gRPC traces.")
 	fs.StringVar(&c.OpenTelemetryConfig.TracingServiceName, "tracing-service-name", c.OpenTelemetryConfig.TracingServiceName, "The name for opentelemetry service.")
 	fs.StringVar(&c.OpenTelemetryConfig.CollectorEndpoint, "collector-endpoint", c.OpenTelemetryConfig.CollectorEndpoint, "The tracing collector endpoint.")
